@@ -5,6 +5,7 @@ import (
 	"context"
 	"io/ioutil"
 	"testing"
+	"time"
 
 	crypto "github.com/libp2p/go-libp2p-crypto"
 	host "github.com/libp2p/go-libp2p-host"
@@ -71,6 +72,11 @@ func TestServerClient(t *testing.T) {
 			t.Fatal(err)
 		}
 		defer listener.Close()
+
+		if listener.Addr().String() != srvHost.ID().Pretty() {
+			t.Fatal("bad listener address")
+		}
+
 		servConn, err := listener.Accept()
 		if err != nil {
 			t.Fatal(err)
@@ -93,6 +99,29 @@ func TestServerClient(t *testing.T) {
 	}()
 
 	clientConn, err := Dial(clientHost, srvHost.ID(), tag)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if clientConn.LocalAddr().String() != clientHost.ID().Pretty() {
+		t.Fatal("Bad LocalAddr")
+	}
+
+	if clientConn.RemoteAddr().String() != srvHost.ID().Pretty() {
+		t.Fatal("Bad RemoteAddr")
+	}
+
+	err = clientConn.SetDeadline(time.Now().Add(time.Second))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = clientConn.SetReadDeadline(time.Now().Add(time.Second))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = clientConn.SetWriteDeadline(time.Now().Add(time.Second))
 	if err != nil {
 		t.Fatal(err)
 	}
