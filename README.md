@@ -43,21 +43,20 @@ Documentation can be read at [Godoc](https://godoc.org/github.com/hsanjuan/go-li
 A simple communication between peers -one acting as server and the other as client- would work like:
 
 ```go
-	go func() {
-		listener, _ := Listen(srvHost, tag)
-		defer listener.Close()
-		servConn, _ := listener.Accept()
-		defer servConn.Close()
-		reader := bufio.NewReader(servConn)
-		msg, _ := reader.ReadString('\n')
-        fmt.Println(msg)
-		servConn.Write([]byte("answer!\n"))
-	}()
-
-	clientConn, _ := Dial(clientHost, srvHost.ID(), tag)
-    clientConn.Write([]byte("question?\n"))
-	resp, _ := ioutil.ReadAll(clientConn)
-    fmt.Println(resp)
+go func() {
+	listener, _ := Listen(srvHost, tag)
+	defer listener.Close()
+	servConn, _ := listener.Accept()
+	defer servConn.Close()
+	reader := bufio.NewReader(servConn)
+	msg, _ := reader.ReadString('\n')
+	fmt.Println(msg)
+	servConn.Write([]byte("answer!\n"))
+}()
+clientConn, _ := Dial(clientHost, srvHost.ID(), tag)
+clientConn.Write([]byte("question?\n"))
+resp, _ := ioutil.ReadAll(clientConn)
+fmt.Println(resp)
 ```
 
 Note error handling above is ommited.
