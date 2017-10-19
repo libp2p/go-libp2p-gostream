@@ -111,6 +111,10 @@ func TestServerClient(t *testing.T) {
 		t.Fatal("Bad RemoteAddr")
 	}
 
+	if clientConn.LocalAddr().Network() != Network {
+		t.Fatal("Bad Network()")
+	}
+
 	err = clientConn.SetDeadline(time.Now().Add(time.Second))
 	if err != nil {
 		t.Fatal(err)
