@@ -3,7 +3,6 @@ package gostream
 import (
 	"bufio"
 	"context"
-	"io/ioutil"
 	"testing"
 	"time"
 
@@ -39,8 +38,10 @@ func TestServerClient(t *testing.T) {
 	clientHost.Peerstore().AddAddrs(srvHost.ID(), srvHost.Addrs(), peerstore.PermanentAddrTTL)
 
 	var tag protocol.ID = "/testitytest"
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
-	go func() {
+	go func(ctx context.Context) {
 		listener, err := Listen(srvHost, tag)
 		if err != nil {
 			t.Fatal(err)
@@ -58,19 +59,25 @@ func TestServerClient(t *testing.T) {
 		defer servConn.Close()
 
 		reader := bufio.NewReader(servConn)
-		msg, err := reader.ReadString('\n')
-		if err != nil {
-			t.Fatal(err)
-		}
-		if string(msg) != "is libp2p awesome?\n" {
-			t.Fatalf("Bad incoming message: %s", msg)
-		}
+		for {
+			msg, err := reader.ReadString('\n')
+			if err != nil {
+				t.Fatal(err)
+			}
+			if string(msg) != "is libp2p awesome?\n" {
+				t.Fatalf("Bad incoming message: %s", msg)
+			}
 
-		_, err = servConn.Write([]byte("yes it is"))
-		if err != nil {
-			t.Fatal(err)
+			_, err = servConn.Write([]byte("yes it is\n"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			select {
+			case <-ctx.Done():
+				return
+			}
 		}
-	}()
+	}(ctx)
 
 	clientConn, err := Dial(clientHost, srvHost.ID(), tag)
 	if err != nil {
@@ -109,12 +116,13 @@ func TestServerClient(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	resp, err := ioutil.ReadAll(clientConn)
+	reader := bufio.NewReader(clientConn)
+	resp, err := reader.ReadString('\n')
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if string(resp) != "yes it is" {
+	if string(resp) != "yes it is\n" {
 		t.Errorf("Bad response: %s", resp)
 	}
 
