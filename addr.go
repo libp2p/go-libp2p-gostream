@@ -1,6 +1,6 @@
 package gostream
 
-import peer "github.com/libp2p/go-libp2p-peer"
+import "github.com/libp2p/go-libp2p-core/peer"
 
 // addr implements net.Addr and holds a libp2p peer ID.
 type addr struct{ id peer.ID }
