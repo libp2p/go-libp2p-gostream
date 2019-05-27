@@ -4,9 +4,9 @@ import (
 	"context"
 	"net"
 
-	host "github.com/libp2p/go-libp2p-host"
-	pnet "github.com/libp2p/go-libp2p-net"
-	protocol "github.com/libp2p/go-libp2p-protocol"
+	"github.com/libp2p/go-libp2p-core/host"
+	"github.com/libp2p/go-libp2p-core/network"
+	"github.com/libp2p/go-libp2p-core/protocol"
 )
 
 // listener is an implementation of net.Listener which handles
@@ -17,7 +17,7 @@ type listener struct {
 	ctx      context.Context
 	tag      protocol.ID
 	cancel   func()
-	streamCh chan pnet.Stream
+	streamCh chan network.Stream
 }
 
 // Accept returns the next a connection to this listener.
@@ -56,10 +56,10 @@ func Listen(h host.Host, tag protocol.ID) (net.Listener, error) {
 		ctx:      ctx,
 		cancel:   cancel,
 		tag:      tag,
-		streamCh: make(chan pnet.Stream),
+		streamCh: make(chan network.Stream),
 	}
 
-	h.SetStreamHandler(tag, func(s pnet.Stream) {
+	h.SetStreamHandler(tag, func(s network.Stream) {
 		select {
 		case l.streamCh <- s:
 		case <-ctx.Done():

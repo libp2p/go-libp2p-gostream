@@ -5,20 +5,21 @@ import (
 	"net"
 	"time"
 
-	host "github.com/libp2p/go-libp2p-host"
-	pnet "github.com/libp2p/go-libp2p-net"
-	peer "github.com/libp2p/go-libp2p-peer"
-	protocol "github.com/libp2p/go-libp2p-protocol"
+	"github.com/libp2p/go-libp2p-core/helpers"
+	"github.com/libp2p/go-libp2p-core/host"
+	"github.com/libp2p/go-libp2p-core/network"
+	"github.com/libp2p/go-libp2p-core/peer"
+	"github.com/libp2p/go-libp2p-core/protocol"
 )
 
 // conn is an implementation of net.Conn which wraps
 // libp2p streams.
 type conn struct {
-	s pnet.Stream
+	s network.Stream
 }
 
 // newConn creates a conn given a libp2p stream
-func newConn(s pnet.Stream) net.Conn {
+func newConn(s network.Stream) net.Conn {
 	return &conn{s}
 }
 
@@ -39,7 +40,7 @@ func (c *conn) Close() error {
 		c.s.Reset()
 		return err
 	}
-	go pnet.AwaitEOF(c.s)
+	go helpers.AwaitEOF(c.s)
 	return nil
 }
 
