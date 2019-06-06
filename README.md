@@ -5,7 +5,7 @@
 [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg)](https://github.com/RichardLitt/standard-readme)
 
 
-> Go "net" wrappers for LibP2P
+> Go "net" wrappers for libp2p
 
 Package `gostream` allows to replace the standard net stack in Go with
 [LibP2P](https://github.com/libp2p/libp2p) streams.
@@ -15,7 +15,7 @@ return implementations of net.Conn and net.Listener.
 
 Instead of the regular "host:port" addressing, `gostream` uses a Peer ID, and
 rather than a raw TCP connection, gostream will use libp2p's net.Stream. This
-means your connections will take advantage of LibP2P's multi-routes, NAT
+means your connections will take advantage of libp2p's multi-routes, NAT
 transversal and stream multiplexing.
 
 ## Table of Contents
