@@ -1,4 +1,4 @@
-module github.com/hsanjuan/go-libp2p-gostream
+module github.com/libp2p/go-libp2p-gostream
 
 require (
 	github.com/libp2p/go-libp2p v0.1.0
