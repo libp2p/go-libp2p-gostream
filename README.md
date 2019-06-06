@@ -1,7 +1,7 @@
 # go-libp2p-gostream
 
-[![Build Status](https://travis-ci.org/hsanjuan/go-libp2p-gostream.svg?branch=master)](https://travis-ci.org/hsanjuan/go-libp2p-gostream)
-[![codecov](https://codecov.io/gh/hsanjuan/go-libp2p-gostream/branch/master/graph/badge.svg)](https://codecov.io/gh/hsanjuan/go-libp2p-gostream)
+[![Build Status](https://travis-ci.org/libp2p/go-libp2p-gostream.svg?branch=master)](https://travis-ci.org/libp2p/go-libp2p-gostream)
+[![codecov](https://codecov.io/gh/libp2p/go-libp2p-gostream/branch/master/graph/badge.svg)](https://codecov.io/gh/libp2p/go-libp2p-gostream)
 [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg)](https://github.com/RichardLitt/standard-readme)
 
 
@@ -32,7 +32,7 @@ This package is a library that uses Go modules for depedency management.
 ## Usage
 
 Documentation can be read at
-[Godoc](https://godoc.org/github.com/hsanjuan/go-libp2p-gostream). The
+[Godoc](https://godoc.org/github.com/libp2p/go-libp2p-gostream). The
 important bits follow.
 
 A simple communication between peers -one acting as server and the other as
@@ -63,4 +63,4 @@ PRs accepted.
 
 ## License
 
-MIT © Hector Sanjuan
+MIT © Protocol Labs, Inc.
