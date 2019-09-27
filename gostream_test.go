@@ -80,7 +80,7 @@ func TestServerClient(t *testing.T) {
 		}
 	}(ctx)
 
-	clientConn, err := Dial(clientHost, srvHost.ID(), tag)
+	clientConn, err := Dial(ctx, clientHost, srvHost.ID(), tag)
 	if err != nil {
 		t.Fatal(err)
 	}
