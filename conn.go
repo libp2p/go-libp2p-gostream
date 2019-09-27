@@ -79,10 +79,7 @@ func (c *conn) SetWriteDeadline(t time.Time) error {
 // Dial opens a stream to the destination address
 // (which should parseable to a peer ID) using the given
 // host and returns it as a standard net.Conn.
-func Dial(h host.Host, pid peer.ID, tag protocol.ID) (net.Conn, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
-	defer cancel()
-
+func Dial(ctx context.Context, h host.Host, pid peer.ID, tag protocol.ID) (net.Conn, error) {
 	s, err := h.NewStream(ctx, pid, tag)
 	if err != nil {
 		return nil, err

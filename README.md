@@ -49,7 +49,7 @@ go func() {
 	fmt.Println(msg)
 	servConn.Write([]byte("answer!\n"))
 }()
-clientConn, _ := Dial(clientHost, srvHost.ID(), tag)
+clientConn, _ := Dial(context.Background(), clientHost, srvHost.ID(), tag)
 clientConn.Write([]byte("question?\n"))
 resp, _ := ioutil.ReadAll(clientConn)
 fmt.Println(resp)
