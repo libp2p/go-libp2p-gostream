@@ -5,7 +5,6 @@ import (
 	"net"
 	"time"
 
-	"github.com/libp2p/go-libp2p-core/helpers"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/network"
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -36,12 +35,7 @@ func (c *conn) Write(b []byte) (n int, err error) {
 // Close closes the connection.
 // Any blocked Read or Write operations will be unblocked and return errors.
 func (c *conn) Close() error {
-	if err := c.s.Close(); err != nil {
-		c.s.Reset()
-		return err
-	}
-	go helpers.AwaitEOF(c.s)
-	return nil
+	return c.s.Close()
 }
 
 // LocalAddr returns the local network address.
