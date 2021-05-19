@@ -3,6 +3,7 @@ package gostream
 import (
 	"bufio"
 	"context"
+	"io"
 	"testing"
 	"time"
 
@@ -45,38 +46,44 @@ func TestServerClient(t *testing.T) {
 	go func(ctx context.Context) {
 		listener, err := Listen(srvHost, tag)
 		if err != nil {
-			t.Fatal(err)
+			t.Error(err)
+			return
 		}
 		defer listener.Close()
 
 		if listener.Addr().String() != srvHost.ID().Pretty() {
-			t.Fatal("bad listener address")
+			t.Error("bad listener address")
+			return
 		}
 
 		servConn, err := listener.Accept()
 		if err != nil {
-			t.Fatal(err)
+			t.Error(err)
+			return
 		}
 		defer servConn.Close()
 
 		reader := bufio.NewReader(servConn)
 		for {
 			msg, err := reader.ReadString('\n')
-			if err != nil {
-				t.Fatal(err)
+			if err == io.EOF {
+				break
 			}
-			if string(msg) != "is libp2p awesome?\n" {
-				t.Fatalf("Bad incoming message: %s", msg)
+			if err != nil {
+				t.Error(err)
+				return
+			}
+			if msg != "is libp2p awesome?\n" {
+				t.Errorf("Bad incoming message: %s", msg)
+				return
 			}
 
 			_, err = servConn.Write([]byte("yes it is\n"))
 			if err != nil {
-				t.Fatal(err)
-			}
-			select {
-			case <-ctx.Done():
+				t.Error(err)
 				return
 			}
+			<-ctx.Done()
 		}
 	}(ctx)
 
