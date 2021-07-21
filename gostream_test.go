@@ -43,7 +43,9 @@ func TestServerClient(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	go func(ctx context.Context) {
+	done := make(chan struct{})
+	go func() {
+		defer close(done)
 		listener, err := Listen(srvHost, tag)
 		if err != nil {
 			t.Error(err)
@@ -83,9 +85,8 @@ func TestServerClient(t *testing.T) {
 				t.Error(err)
 				return
 			}
-			<-ctx.Done()
 		}
-	}(ctx)
+	}()
 
 	clientConn, err := Dial(ctx, clientHost, srvHost.ID(), tag)
 	if err != nil {
@@ -138,4 +139,5 @@ func TestServerClient(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	<-done
 }
