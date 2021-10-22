@@ -18,10 +18,7 @@ import (
 // newHost illustrates how to build a libp2p host with secio using
 // a randomly generated key-pair
 func newHost(t *testing.T, listen multiaddr.Multiaddr) host.Host {
-	h, err := libp2p.New(
-		context.Background(),
-		libp2p.ListenAddrs(listen),
-	)
+	h, err := libp2p.New(libp2p.ListenAddrs(listen))
 	if err != nil {
 		t.Fatal(err)
 	}
