@@ -11,11 +11,19 @@ import (
 	"github.com/libp2p/go-libp2p-core/protocol"
 )
 
+// Stream is a subset of the read-only methods on the network.Stream interface
+type Stream interface {
+	ID() string
+	Protocol() protocol.ID
+}
+
 // conn is an implementation of net.Conn which wraps
 // libp2p streams.
 type conn struct {
 	s network.Stream
 }
+
+var _ Stream = (*conn)(nil)
 
 // newConn creates a conn given a libp2p stream
 func newConn(s network.Stream) net.Conn {
@@ -79,4 +87,14 @@ func Dial(ctx context.Context, h host.Host, pid peer.ID, tag protocol.ID) (net.C
 		return nil, err
 	}
 	return newConn(s), nil
+}
+
+// ID returns the underlying network.Stream's ID
+func (c *conn) ID() string {
+	return c.s.ID()
+}
+
+// Protocol returns the underlying network.Stream's Protocol
+func (c *conn) Protocol() protocol.ID {
+	return c.s.Protocol()
 }
