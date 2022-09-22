@@ -16,7 +16,7 @@ return implementations of net.Conn and net.Listener.
 Instead of the regular "host:port" addressing, `gostream` uses a Peer ID, and
 rather than a raw TCP connection, gostream will use libp2p's net.Stream. This
 means your connections will take advantage of libp2p's multi-routes, NAT
-transversal and stream multiplexing.
+traversal, and stream multiplexing.
 
 ## Table of Contents
 
