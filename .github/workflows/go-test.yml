@@ -2,7 +2,6 @@ name: Go Test
 
 on:
   pull_request:
-  merge_group:
   push:
     branches: ["master"]
   workflow_dispatch:
@@ -16,4 +15,5 @@ concurrency:
 
 jobs:
   go-test:
-    uses: pl-strflt/uci/.github/workflows/go-test.yml@v0.0
+    uses: pl-strflt/uci/.github/workflows/go-test.yml@v1.0
+    secrets: inherit
